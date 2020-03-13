@@ -1,0 +1,41 @@
+grafana_jvm_memory_dashboards_grafonnet:
+  - file_name: jvm_memory_info
+    dashboard_name: "Memory info"
+    time_from: "now-3h"
+    tags:
+      - jvm
+      - memory
+    templates:
+      - name: "instance"
+        query: "label_values(java_lang_Memory_HeapMemoryUsage_max, instance)"
+        label: "Instance"
+        includeAll: "false"
+    panels:
+      - name: "Heap memory"
+        fill: 0
+        format: "decbytes"
+        span: 6
+        gridpos_x: 0
+        gridpos_y: 0
+        gridpos_w: 24
+        gridpos_h: 7
+        min: 0
+        decimals: 2
+        targets:
+          - expr: 'java_lang_Memory_HeapMemoryUsage_max{instance="$instance"}'
+            legend_format: !unsafe "max"
+          - expr: 'java_lang_Memory_HeapMemoryUsage_used{instance="$instance"}'
+            legend_format: !unsafe "used"
+      - name: "Non-heap memory"
+        fill: 0
+        format: "decbytes"
+        span: 6
+        gridpos_x: 0
+        gridpos_y: 0
+        gridpos_w: 24
+        gridpos_h: 7
+        min: 0
+        decimals: 2
+        targets:
+          - expr: 'java_lang_Memory_NonHeapMemoryUsage_used{instance="$instance"}'
+            legend_format: !unsafe "used"
